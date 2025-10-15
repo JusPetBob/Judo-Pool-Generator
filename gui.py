@@ -3,7 +3,8 @@ from tkinter import filedialog
 import openpyxl
 import pandas as pd
 import webbrowser
-from os import path
+import os
+from info import check_updates
 
 class Error:
     def __init__(self,message,parent:ttk.Window):
@@ -36,7 +37,8 @@ class GUI:
     def __init__(self,app):
         self.app = app
         
-        self.root = ttk.Window(f"Pool generator-{self.app.ver}")
+        #-menu
+        self.root = ttk.Window(f"Pool generator - ver.{self.app.ver}")
         self.root.geometry("700x300")
         self.root.bind_all('<Button>', self.change_focus)
         
@@ -50,7 +52,7 @@ class GUI:
 
         helpmenu = ttk.Menu(menu)
         menu.add_cascade(label="Help", menu=helpmenu)
-        helpmenu.add_command(label="About...", command=self.about)
+        helpmenu.add_command(label="About & Help...", command=self.about)
         
         #-frames
         self.c_frame = ttk.Frame(self.root)
@@ -66,9 +68,14 @@ class GUI:
 
         self.g_file_b = ttk.Button(self.c_frame,text="Browse",command=self.get_file)
         self.g_file_b.grid(row=0,column=1)
+        
+        self.l_file_b = ttk.Button(self.c_frame,text="Browse",command=lambda: self.load_df(None))
+        self.l_file_b.grid(row=1,column=0,sticky="w")
+        
+        self.updates()
     
     def about(self):
-        webbrowser.open('file://' + path.join(path.split(__file__)[0],"assets/about.html"))
+        webbrowser.open('file://' + os.path.join(os.path.split(__file__)[0],"assets/about.html"))
     
     def change_focus(self,event):
         event.widget.focus_set()
@@ -81,13 +88,42 @@ class GUI:
 
     def load_df(self,e):
         path = self.g_file_e.get()
-        try:
+        if os.path.isfile(path):
             self.df = pd.read_excel(path)
             self.wb = openpyxl.open(path)
             self.ws = self.wb.active
-        except:
-            Error("Der Pfad wurde nicht gefunden",self.root)
+        else:
+            Error("The path doesn't exist",self.root)
             return
+
+    def updates(self):
+        update = check_updates.check(self.app.ver)
+        
+        if not update[0]:
+            def open():
+                info.destroy()
+                webbrowser.open("https://github.com/JusPetBob/Judo-Pool-Generator/releases/tag/"+update[1])
+            def cont():
+                info.destroy()
+                self.root.lift()
+            
+            print(update)
+            info = ttk.Toplevel(title="Update available")
+            info.geometry("200x100")
+            info.maxsize(200,100)
+            
+            f = ttk.Frame(info)
+            f.pack(side=ttk.BOTTOM,pady=2,anchor="center")
+            
+            open_b = ttk.Button(f,text="open",command=open)
+            open_b.pack(side=ttk.LEFT,anchor="e",padx=10)
+            continue_b = ttk.Button(f,text="continue",command=cont)
+            continue_b.pack(side=ttk.RIGHT,padx=10)
+            
+            l = ttk.Label(info,borderwidth=1,text="A new version is available")
+            l.pack(side=ttk.TOP,pady=4)
+            
+            info.after(100,info.lift)
 
     def run(self):
         self.root.mainloop()
