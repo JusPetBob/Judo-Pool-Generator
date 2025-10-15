@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Help & About — MyApp</title>
+  <meta name="description" content="Help and About page for MyApp — support, troubleshooting, changelog, and credits." />
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#4f46e5;--glass:rgba(255,255,255,0.03);--radius:12px}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;line-height:1.45;margin:0;background:linear-gradient(180deg,#071027 0%, #071426 100%);color:#e6eef6;padding:28px}
+    .container{max-width:1000px;margin:0 auto}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:white}
+    h1{font-size:1.6rem;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    main{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    aside{background:var(--glass);padding:14px;border-radius:12px;color:var(--muted);min-height:180px}
+    .section{margin-bottom:14px}
+    .section h2{margin:0 0 8px;font-size:1.05rem}
+    .meta{font-size:.95rem;color:var(--muted);margin-bottom:12px}
+    .search{display:flex;gap:8px}
+    .search input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .chip{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:.9rem;margin-right:6px}
+    details summary{cursor:pointer;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.02);outline:none}
+    details[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0}
+    details .content{padding:12px;border-radius:0 0 10px 10px;background:rgba(255,255,255,0.01);color:var(--muted)}
+    .btn{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600}
+    .muted{color:var(--muted)}
+    .small{font-size:.85rem}
+    .kbd{display:inline-block;background:#061025;border-radius:6px;padding:6px 8px;border:1px solid rgba(255,255,255,0.03);font-family:monospace}
+    footer{margin-top:18px;color:var(--muted);font-size:.9rem}
+    .changelog{max-height:240px;overflow:auto;padding:8px;background:rgba(255,255,255,0.01);border-radius:8px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr;}.logo{width:48px;height:48px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo" aria-hidden>42</div>
+      <div>
+        <h1>Help &amp; About</h1>
+        <p class="lead">Everything you need to use Pool generator</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main aria-labelledby="main-heading">
+        <h2 id="main-heading" class="section">Get help</h2>
+
+        <section class="section" aria-labelledby="search-help">
+          <h3 id="search-help">Search help topics</h3>
+          <form class="search" role="search" onsubmit="event.preventDefault(); showSearchResult();">
+            <input id="help-search" type="search" placeholder="Search for "updating", "backup", "account"..." aria-label="Search help topics" />
+            <button class="btn" type="submit">Search</button>
+          </form>
+          <p class="muted small" id="search-result" style="margin-top:10px;display:none"></p>
+        </section>
+
+        <!--
+        <section class="section" aria-labelledby="faqs">
+          <h3 id="faqs">Frequently asked questions</h3>
+
+          <details>
+            <summary>How do I update to the latest version?</summary>
+            <div class="content">
+              Open the app menu → <strong>Check for updates</strong>. If auto-updates are enabled the app will download and install automatically on next restart.
+            </div>
+          </details>
+
+          <details>
+            <summary>How do I export my data?</summary>
+            <div class="content">Go to Settings → Account → Export data. You can choose JSON or CSV formats. For large accounts we recommend exporting overnight.</div>
+          </details>
+
+          <details>
+            <summary>I'm seeing a sync error — what now?</summary>
+            <div class="content">
+              Try these steps: <ol><li>Ensure you have an internet connection</li><li>Sign out and sign back in</li><li>Force a sync from Settings → Sync</li></ol>
+              If the problem persists, contact support with a diagnostics report (Settings → Diagnostics → Send report).
+            </div>
+          </details>
+        </section>
+        -->
+
+        <section class="section" aria-labelledby="troubleshooting">
+          <h3 id="troubleshooting">Troubleshooting</h3>
+          <p class="muted">Quick fixes for common issues.</p>
+          <ul>
+            <li><strong>App won't launch:</strong> Clear cache, restart device, reinstall if needed.</li>
+            <li><strong>Slow performance:</strong> Check background processes and available disk space.</li>
+            <li><strong>Missing features:</strong> Confirm you're on the correct plan and version.</li>
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="shortcuts">
+          <h3 id="shortcuts">Keyboard shortcuts</h3>
+          <p class="small muted">Press these to speed up your workflow.</p>
+          <p><span class="kbd">Ctrl</span> + <span class="kbd">K</span> — Quick search</p>
+          <p><span class="kbd">Ctrl</span> + <span class="kbd">,</span> — Open settings</p>
+          <p><span class="kbd">?</span> — Open help</p>
+        </section>
+
+        <section class="section" aria-labelledby="release-notes">
+          <h3 id="release-notes">Release notes</h3>
+          <div class="changelog" role="list">
+            <article role="listitem" class="small">
+              <strong>v2.4.1</strong> — Oct 8, 2025<br>
+              Bug fixes: sync reliability, memory leak in background worker.
+            </article>
+            <hr />
+            <article role="listitem" class="small">
+              <strong>v2.4.0</strong> — Sep 12, 2025<br>
+              New: advanced search, dark-theme improvements, export filters.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="contact">
+          <h3 id="contact">Contact & Feedback</h3>
+          <p class="muted small">If you still need help, send us a message. We read every ticket.</p>
+          <form onsubmit="event.preventDefault(); fakeSend();" aria-label="Contact support form">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input name="name" placeholder="Your name" required style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+              <input name="email" placeholder="Email" type="email" required style="width:260px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+            </div>
+            <textarea name="message" placeholder="Describe your issue or feedback" required style="width:100%;min-height:110px;margin-top:8px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit"></textarea>
+            <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+              <button class="btn" type="submit">Send message</button>
+              <span class="muted small">Or email <a href="mailto:support@myapp.example" style="color:inherit;text-decoration:underline">support@myapp.example</a></span>
+            </div>
+          </form>
+        </section>
+
+        <footer>
+          <p class="small muted">Having trouble with the contact form? Please open an issue at <a href="#" style="color:inherit;text-decoration:underline">support portal</a>.</p>
+        </footer>
+      </main>
+
+      <aside aria-label="About and quick links">
+        <div style="margin-bottom:12px">
+          <h3 style="margin:0 0 6px">About MyApp</h3>
+          <p class="muted small">MyApp helps you manage X, Y and Z — fast, secure, and private. Version <strong>2.4.1</strong></p>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <h4 style="margin:0 0 6px">Quick links</h4>
+          <div class="chip">Account</div><div class="chip">Billing</div><div class="chip">Privacy</div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <h4 style="margin:0 0 6px">Support hours</h4>
+          <p class="muted small">Mon—Fri, 08:00 — 18:00 (UTC)</p>
+        </div>
+
+        <div style="margin-bottom:10px">
+          <h4 style="margin:0 0 6px">Legal</h4>
+          <p class="muted small">Privacy · Terms · Open-source licenses</p>
+        </div>
+
+        <div>
+          <h4 style="margin:0 0 6px">Credits</h4>
+          <p class="muted small">Made with ❤️ by the MyApp team. View contributors on the project page.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    function showSearchResult(){
+      const q = document.getElementById('help-search').value.trim();
+      const el = document.getElementById('search-result');
+      if(!q){el.style.display='none'; return}
+      el.style.display='block';
+      el.textContent = `No direct articles matched "${q}". Try browsing the FAQ or contact support.`;
+    }
+    function fakeSend(){
+      alert('Thanks — your message has been queued to be sent to support (this is a demo).');
+    }
+    // small accessibility helper: focus outline for keyboard users
+    (function(){
+      function handleFirstTab(e){ if(e.key==='Tab'){document.body.classList.add('user-is-tabbing');window.removeEventListener('keydown',handleFirstTab)} }
+      window.addEventListener('keydown',handleFirstTab);
+    })();
+  </script>
+</body>
+</html>
