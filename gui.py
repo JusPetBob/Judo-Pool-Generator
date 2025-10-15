@@ -68,7 +68,7 @@ class GUI:
         self.g_file_b.grid(row=0,column=1)
     
     def about(self):
-        webbrowser.open('file://' + path.join(path.split(__file__)[0],"help/about.html"))
+        webbrowser.open('file://' + path.join(path.split(__file__)[0],"assets/about.html"))
     
     def change_focus(self,event):
         event.widget.focus_set()
