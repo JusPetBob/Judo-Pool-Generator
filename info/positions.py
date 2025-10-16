@@ -4,10 +4,10 @@ class const:
         AGECLASS = "A3"
         WEIGHTCLASS = "A5"
         MAT = "F3"
-        POOL = "F5"
+        P_Name = "F5"
     
     class main:
         BEGIN = 10
         F_NAME = "B"
         L_NAme = "C"
-        ASSOCIATION = "D"
+        CLASS = "D"

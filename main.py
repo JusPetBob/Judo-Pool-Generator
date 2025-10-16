@@ -5,8 +5,6 @@ class App:
         self.ver = ver
         
         self.gui = gui.GUI(self)
-        
-        #self.gui.updates()
     
     def run(self):
         self.gui.run()

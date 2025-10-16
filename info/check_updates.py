@@ -8,8 +8,9 @@ def check(curr_ver:str) -> tuple[bool,str]:
     versions = req.json()
     
     for v in versions:
+        # checking 
         if not v["prerelease"]:
-            ver_=v["tag_name"].split(".")
+            ver_=v["tag_name"].strip("v").split(".")
             
             if int(ver_[0])>int(ver[0]):
                 ver = ver_
