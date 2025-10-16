@@ -1,11 +1,10 @@
 import ttkbootstrap as ttk
 from tkinter import filedialog
-import openpyxl
-import pandas as pd
 import webbrowser
 import os
 from info import check_updates
 from difflib import SequenceMatcher
+from backend import Backend
 
 class Error:
     def __init__(self,message,parent:ttk.Window):
@@ -30,11 +29,10 @@ class Error:
         self.parent.focus_get()
         self.parent.deiconify()
 
+
 class GUI:
     root:ttk.Window
-    df:pd.DataFrame
-    wb:openpyxl.Workbook
-    columns:list = []
+    backend:Backend
     def __init__(self,app):
         self.app = app
         
@@ -76,6 +74,7 @@ class GUI:
         
         self.cont_b = ttk.Button(self.a_frame,text="Continue",command=self.start)
         
+        # check for updates
         self.updates()
     
     def about(self):
@@ -97,9 +96,7 @@ class GUI:
         path = self.g_file_e.get()
         if os.path.isfile(path):
             try:
-                self.df = pd.read_excel(path)
-                self.wb = openpyxl.open(path)
-                self.ws = self.wb.active
+                self.backend = Backend(path)
             except Exception as e:
                 Error(f"an unexpexted error occured: {e}",self.root)
                 return
@@ -109,7 +106,7 @@ class GUI:
         
         self.cont_b.grid(row=2,column=0,sticky="w",padx=4,pady=6)
         
-        self.assignments = Assignments(self.a_frame,self.df)
+        self.assignments = Assignments(self.a_frame,self.backend)
 
     def updates(self):
         update = check_updates.check(self.app.ver)
@@ -141,18 +138,18 @@ class GUI:
             info.after(100,info.lift)
     
     def start(self):
-        pass
+        self.backend.run()
 
     def run(self):
         self.root.mainloop()
 
 
 class Assignments:
-    def __init__(self, parent:ttk.Frame, df:pd.DataFrame):
+    def __init__(self, parent:ttk.Frame, backend:Backend):
         self.parent = parent
-        self.df = df
+        self.df = backend.df
         
-        self.columns_norm = ["Name","Firstname","Age","Club"]
+        self.columns_norm = backend.cols
         
         self.var = []
         
@@ -175,4 +172,5 @@ class Assignments:
             self.elements[-1][1].grid(row=1,column=i,padx=6,pady=(2,6),sticky="w")
 
     def update_df(self,i):
-        self.df.columns.values[i]=self.var[i].get()
+        cols = self.df.columns.values.tolist()
+        self.df.columns.values[cols.index(self.var[i].get())]=self.columns_norm[i]
