@@ -7,6 +7,7 @@ class Backend:
     df:pd.DataFrame
     cols:list[str]
     pools:list[pd.DataFrame]
+    free:list[str] = []
     def __init__(self,path:str|PathLike):
         self.df = pd.read_excel(path)
         

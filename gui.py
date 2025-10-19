@@ -1,5 +1,5 @@
 import ttkbootstrap as ttk
-from ttkbootstrap.scrolled import ScrolledFrame
+from ttkbootstrap.tableview import Tableview
 from tkinter import filedialog
 import webbrowser
 import os
@@ -33,7 +33,9 @@ class Error:
 
 class Assignments:
     def __init__(self, parent:ttk.Frame, backend:Backend):
-        self.parent = parent
+        self.parent = ttk.Frame(parent)
+        self.parent.grid(row=1,column=0,sticky="w",padx=4,pady=6)
+        self.destroy = self.parent.destroy
         self.df = backend.df
         
         self.columns_norm = backend.cols
@@ -66,63 +68,39 @@ class Assignments:
 class Content:
     def __init__(self, parent:ttk.Frame, backend:Backend):
         self.nb = ttk.Notebook(parent)
+        self.destroy = self.nb.destroy
         
         for i in range(len(backend.pools)):
-            self.nb.add(self.Pool(self.nb,i,backend), text=f"Pool {i+1}",sticky="nw")
+            self.nb.add(self.Pool(self.nb,i,backend), text=f"Pool {i+1}",sticky="snwe")
         
-        self.nb.pack(anchor="w",fill=ttk.BOTH)
+        self.nb.pack(anchor="w",fill=ttk.BOTH,expand=True)
     
     class Pool(ttk.Frame):
         def __init__(self,master,idx,backend:Backend):
             super().__init__(master)
-            
-            self.persons = []
+
             self.backend = backend
+            self.idx = idx
             
-            for n,row in backend.pools[idx].iterrows():###change to txt vars 
-                self.persons.append(
-                        [
-                        ttk.Entry(self,validate="key",validatecommand=lambda e:self.edit_name(e,n),t),#####################################
-                        ttk.Entry(self,validate="key",validatecommand=lambda e:self.edit_firstname(e,n)),
-                        ttk.Entry(self,validate="key",validatecommand=lambda e:self.edit_age(e,n)),
-                        ttk.Entry(self,validate="key",validatecommand=lambda e:self.edit_weight(e,n)),
-                        ttk.Entry(self,validate="key",validatecommand=lambda e:self.edit_club(e,n)),
-                    ]
-                )
-                
-                for c,p in enumerate(self.persons[-1]):
-                    p.grid(row=n,column=c)
-        
-        def edit_name(self,event,idx):####refractor
-            print(event)
-            #self.backend.df.loc[idx,"Name"] = 
-
-        def edit_firstname(self,event,idx):##
-            print(event)
-            #self.backend.df.loc[idx,"Name"] = 
-
-        def edit_age(self,event,idx):##
-            print(event)
-            #self.backend.df.loc[idx,"Name"] = 
-
-        def edit_weight(self,event,idx):##
-            print(event)
-            #self.backend.df.loc[idx,"Name"] =         
-
-        def edit_club(self,event,idx):##
-            print(event)
-            #self.backend.df.loc[idx,"Name"] = 
-
-        class Person:####### rm this
-            def __init__(self,master,idx,backend:Backend,p_idx):
-                print(idx,backend,p_idx)
-                
+            pool = backend.pools[self.idx]
+            
+            self.dt = Tableview(
+                master=self,
+                coldata=[{"text": i, "stretch": False} for i in pool.columns.values],
+                rowdata=[v.values.flatten().tolist() for i,v in pool.iterrows()],
+                paginated=False,
+                searchable=True,
+                autoalign=True
+                #stripecolor=(const.LIGHT, None),
+            )
+            self.dt.grid(row=0,column=0,sticky="w",padx=10, pady=2)
 
 
 class GUI:
     root:ttk.Window
     backend:Backend
-    m_cont:Content
+    m_cont:Content = None
+    assignments:Assignments = None
     def __init__(self,app):
         self.app = app
         
@@ -183,6 +161,9 @@ class GUI:
             self.load_df()
 
     def load_df(self):
+        if self.m_cont:
+            self.m_cont.destroy()
+        
         path = self.g_file_e.get()
         if os.path.isfile(path):
             try:
@@ -195,6 +176,9 @@ class GUI:
             return
         
         self.cont_b.grid(row=2,column=0,sticky="w",padx=4,pady=6)
+        
+        #if self.assignments:
+        #    self.assignments.destroy()
         
         self.assignments = Assignments(self.a_frame,self.backend)
 
